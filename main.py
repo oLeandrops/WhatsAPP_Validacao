@@ -10,7 +10,7 @@ options.add_argument('start-maximized')
 options.add_experimental_option('excludeSwitches', ['enable-automation'])
 options.add_experimental_option('useAutomationExtension', False)
 browser = Chrome(executable_path='C:\DRIVERS\chromedriver.exe',options=options)
-browser.implicitly_wait(2)
+browser.implicitly_wait(1.2)
 telefones = pd.read_csv('TESTE_WHATSAPP.csv')
 urlprincipal = 'https://web.whatsapp.com/'
 browser.get(urlprincipal)
@@ -30,13 +30,15 @@ try:
                 sleep(2)
                 if len(browser.find_elements(By.CSS_SELECTOR,'div[title="Mensagem"]')) > 0:
                     wppOn.append(fone)
-                    sleep(0.5)
-                    menu = browser.find_element(By.CSS_SELECTOR, '#main')
-                    menu.find_element(By.CSS_SELECTOR, 'div[data-testid="conversation-menu-button"] ').click()
-                    sleep(0.5)
-                    browser.find_elements(By.CSS_SELECTOR, 'li')[-1].click()
-                    browser.find_element(By.CSS_SELECTOR, 'div[class*="_2Zdgs"]').click()
-                    browser.find_element(By.CSS_SELECTOR, 'div[class*="_2Zdgs"]').click()
+                    if len(browser.find_elements(By.CSS_SELECTOR, '#main')) > 0:
+                        menu = browser.find_element(By.CSS_SELECTOR, '#main')
+                        menu.find_element(By.CSS_SELECTOR, 'div[data-testid="conversation-menu-button"] ').click()
+                        sleep(0.5)
+                        browser.find_elements(By.CSS_SELECTOR, 'li')[-1].click()
+                        sleep(0.5)
+                        browser.find_element(By.CSS_SELECTOR, 'div[class*="_2Zdgs"]').click()
+                        if len(browser.find_elements(By.CSS_SELECTOR, 'div[class*="_2Zdgs"]')) > 0:
+                            browser.find_element(By.CSS_SELECTOR, 'div[class*="_2Zdgs"]').click()
                     print(f'Total de {len(wppOn)} Validos.')
                 elif len(browser.find_elements(By.CSS_SELECTOR, 'div[data-animate-modal-popup="true"]')) > 0:
                     wppOff.append(fone)
